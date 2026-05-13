@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartFit Wellness 3.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --yellow: #FFE600;
+  --black: #0D0D0D;
+  --dark: #1A1A1A;
+  --mid: #2A2A2A;
+  --border: #333;
+  --gray: #aaa;
+  --white: #F5F5F0;
+  --red: #E63946;
+  --blue: #2196F3;
+  --green: #4CAF50;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{background:#0D0D0D;color:var(--white);font-family:'Barlow',sans-serif;font-weight:400;min-height:100vh;}
+
+/* HEADER */
+header{background:var(--yellow);padding:28px 56px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;}
+.logo h1{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(28px,5vw,52px);letter-spacing:-1px;color:var(--black);line-height:1;text-transform:uppercase;}
+.logo p{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#555;margin-top:6px;font-weight:500;}
+.meta{text-align:right;font-size:11px;color:#555;line-height:1.8;font-weight:500;}
+
+/* TABS */
+nav{background:var(--black);border-bottom:2px solid var(--yellow);padding:0 56px;display:flex;overflow-x:auto;gap:0;}
+nav button{background:none;border:none;color:var(--gray);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:2px;text-transform:uppercase;padding:16px 20px;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;margin-bottom:-2px;}
+nav button.active{color:var(--yellow);border-bottom-color:var(--yellow);}
+nav button:hover:not(.active){color:var(--white);}
+
+/* MAIN */
+main{padding:48px 56px;max-width:1280px;background:var(--black);}
+.panel{display:none;animation:fi .3s ease;}
+.panel.active{display:block;}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* SHARED COMPONENTS */
+.slabel{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--yellow);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.slabel::after{content:'';flex:1;height:1px;background:var(--border);}
+
+h2.disp{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(26px,4vw,48px);letter-spacing:-1px;line-height:1.05;text-transform:uppercase;margin-bottom:16px;}
+h2.disp em{color:var(--yellow);font-style:normal;}
+
+.lead{font-size:14px;line-height:1.8;color:#ccc;max-width:700px;margin-bottom:14px;}
+
+.src{display:inline-block;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--blue);border:1px solid var(--blue);padding:1px 5px;border-radius:2px;margin-left:4px;vertical-align:middle;opacity:.75;}
+
+.grid1{display:grid;gap:1px;background:var(--border);border:1px solid var(--border);margin:24px 0;}
+.g3{grid-template-columns:repeat(auto-fill,minmax(280px,1fr));}
+.g2{grid-template-columns:repeat(auto-fill,minmax(340px,1fr));}
+.g4{grid-template-columns:repeat(4,1fr);}
+
+.card{background:var(--dark);padding:24px;}
+.card:hover{background:var(--mid);}
+
+.clabel{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:6px;}
+.card h3{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:20px;text-transform:uppercase;margin-bottom:4px;}
+.csub{font-size:11px;color:var(--gray);margin-bottom:14px;}
+.card ul{list-style:none;display:flex;flex-direction:column;gap:7px;}
+.card ul li{font-size:12px;line-height:1.5;padding-left:14px;position:relative;color:#ddd;}
+.card ul li::before{content:'→';position:absolute;left:0;color:var(--yellow);font-size:10px;}
+.card .fn{font-size:9px;color:var(--gray);border-top:1px solid var(--border);padding-top:8px;margin-top:12px;}
+
+.bignum{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(40px,6vw,60px);color:var(--yellow);line-height:1;margin-bottom:8px;}
+.bignum-label{font-size:12px;line-height:1.6;margin-bottom:8px;color:var(--white);}
+.bigsrc{font-size:10px;color:var(--gray);letter-spacing:1px;text-transform:uppercase;border-top:1px solid var(--border);padding-top:7px;margin-top:7px;}
+
+.callout{background:var(--dark);border:1px solid var(--border);border-left:3px solid var(--yellow);padding:20px 24px;margin:14px 0;}
+.callout .ctag{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:8px;display:block;}
+.callout p{font-size:13px;line-height:1.8;color:#ddd;}
+
+.tension{background:var(--yellow);color:var(--black);padding:24px;margin:20px 0;}
+.tension .tlabel{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+.tension p{font-size:13px;line-height:1.8;font-weight:500;}
+
+.wbox{background:var(--dark);border:1px solid var(--border);padding:22px;margin:18px 0;}
+.wbox h4{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;text-transform:uppercase;margin-bottom:14px;color:var(--yellow);}
+.wrow{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);font-size:12px;flex-wrap:wrap;gap:6px;}
+.wrow:last-child{border:none;}
+.wrow .wname{font-weight:600;color:var(--white);}
+.wrow .wpct{font-size:13px;font-weight:700;color:var(--yellow);}
+.wrow .wnote{color:var(--gray);font-size:11px;}
+.wbar{height:4px;background:var(--border);border-radius:2px;margin-top:4px;width:100%;}
+.wbar-fill{height:4px;background:var(--yellow);border-radius:2px;}
+.fn{font-size:9px;color:var(--gray);border-top:1px solid var(--border);padding-top:7px;margin-top:10px;}
+
+/* HCARDS */
+.hcard{border:1px solid var(--border);margin-bottom:20px;background:var(--dark);}
+.hcard.featured{border-color:var(--yellow);}
+.hhead{padding:20px 24px;background:var(--mid);display:flex;align-items:flex-start;gap:16px;border-bottom:1px solid var(--border);}
+.hnum{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:48px;color:var(--border);line-height:1;min-width:52px;flex-shrink:0;}
+.featured .hnum{color:rgba(255,230,0,.2);}
+.htitle{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:18px;text-transform:uppercase;line-height:1.3;padding-top:8px;}
+.badge{display:inline-block;font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;background:var(--yellow);color:var(--black);font-weight:700;margin-left:10px;vertical-align:middle;}
+.hbody{padding:20px 24px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;}
+.hsec h4{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:8px;}
+.hsec p{font-size:12px;line-height:1.7;color:#bbb;}
+
+/* PRIORIZATION */
+.pmatrix{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin:24px 0;}
+.pcard{background:var(--dark);padding:22px;}
+.pcard h3{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px;text-transform:uppercase;margin-bottom:12px;color:var(--yellow);}
+.criterion{margin-bottom:14px;}
+.criterion .cname{font-size:12px;font-weight:600;color:var(--white);margin-bottom:4px;display:flex;justify-content:space-between;}
+.criterion .cname span{color:var(--yellow);}
+.cbar{height:6px;background:var(--border);border-radius:3px;}
+.cbar-fill{height:6px;border-radius:3px;background:var(--yellow);}
+.criterion p{font-size:11px;color:var(--gray);margin-top:5px;line-height:1.5;}
+
+.scoring-table{width:100%;border-collapse:collapse;margin:24px 0;font-size:12px;}
+.scoring-table th{background:var(--yellow);color:var(--black);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;padding:10px 14px;text-align:left;}
+.scoring-table td{padding:10px 14px;border-bottom:1px solid var(--border);color:#ddd;vertical-align:middle;}
+.scoring-table tr:nth-child(even) td{background:var(--dark);}
+.scoring-table tr:hover td{background:var(--mid);}
+.score-badge{display:inline-block;width:28px;height:28px;border-radius:50%;background:var(--yellow);color:var(--black);font-weight:700;font-size:13px;line-height:28px;text-align:center;}
+.score-badge.hi{background:var(--yellow);}
+.score-badge.mid{background:#888;color:var(--white);}
+.score-badge.lo{background:var(--border);color:var(--gray);}
+.winner-row td{background:rgba(255,230,0,0.05)!important;border-left:3px solid var(--yellow);}
+
+/* NFC */
+.nfc-layout{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;}
+.nfc-explain h3{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;text-transform:uppercase;margin-bottom:10px;margin-top:24px;color:var(--yellow);}
+.nfc-explain p{font-size:13px;line-height:1.8;color:var(--gray);margin-bottom:12px;}
+.nfc-flow{display:flex;flex-direction:column;gap:1px;margin:20px 0;}
+.nfc-step{background:var(--dark);padding:16px 20px;display:flex;align-items:flex-start;gap:14px;border:1px solid var(--border);}
+.nfc-step.active-step{border-color:var(--yellow);}
+.nfc-icon{width:36px;height:36px;background:var(--yellow);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.nfc-step-text h4{font-size:13px;font-weight:600;color:var(--white);margin-bottom:3px;}
+.nfc-step-text p{font-size:11px;color:var(--gray);line-height:1.5;}
+.nfc-machine{background:var(--dark);border:2px solid var(--yellow);border-radius:12px;padding:28px;text-align:center;}
+.nfc-machine .machine-icon{font-size:56px;margin-bottom:12px;}
+.nfc-machine h3{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:20px;text-transform:uppercase;margin-bottom:8px;}
+.nfc-machine p{font-size:11px;color:var(--gray);margin-bottom:16px;line-height:1.6;}
+.nfc-tag{display:inline-flex;align-items:center;gap:8px;background:var(--yellow);color:var(--black);font-weight:700;font-size:11px;letter-spacing:1px;text-transform:uppercase;padding:8px 14px;border-radius:4px;}
+.nfc-tag::before{content:'📡';font-size:14px;}
+.vs-box{background:var(--mid);border:1px solid var(--border);padding:20px;margin-top:20px;}
+.vs-box h4{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;text-transform:uppercase;color:var(--yellow);margin-bottom:14px;}
+.vs-row{display:flex;gap:12px;margin-bottom:10px;align-items:flex-start;}
+.vs-icon{font-size:16px;flex-shrink:0;margin-top:2px;}
+.vs-row p{font-size:12px;color:#ddd;line-height:1.6;}
+.fake-door-nfc{background:var(--dark);border:1px solid var(--yellow);padding:20px;margin-top:20px;border-radius:8px;}
+.fake-door-nfc h4{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;color:var(--yellow);margin-bottom:8px;}
+.fake-door-nfc p{font-size:12px;color:var(--gray);line-height:1.6;margin-bottom:12px;}
+.fd-steps-nfc{display:flex;flex-direction:column;gap:6px;}
+.fd-step-nfc{background:var(--mid);padding:8px 12px;font-size:11px;color:#ddd;border-left:2px solid var(--yellow);}
+
+/* RECEITA */
+.upsell-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);margin:20px 0;}
+.upsell-card{background:var(--dark);padding:20px;}
+.upsell-card .uprice{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:32px;color:var(--yellow);line-height:1;}
+.upsell-card .uname{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;margin-bottom:4px;}
+.upsell-card p{font-size:11px;color:var(--gray);line-height:1.5;}
+
+.scenario-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin:20px 0;}
+.scenario{background:var(--dark);padding:24px;}
+.scenario.real{border-top:3px solid var(--yellow);}
+.scenario.pess{border-top:3px solid var(--gray);}
+.scenario.otim{border-top:3px solid var(--green);}
+.scenario .scen-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+.scenario.pess .scen-label{color:var(--gray);}
+.scenario.real .scen-label{color:var(--yellow);}
+.scenario.otim .scen-label{color:var(--green);}
+.scenario h3{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:36px;line-height:1;margin-bottom:6px;}
+.scenario.pess h3{color:var(--gray);}
+.scenario.real h3{color:var(--yellow);}
+.scenario.otim h3{color:var(--green);}
+.scenario .sarrow{font-size:12px;color:#ddd;margin-bottom:14px;}
+.scenario ul{list-style:none;display:flex;flex-direction:column;gap:6px;}
+.scenario ul li{font-size:11px;color:var(--gray);padding-left:14px;position:relative;}
+.scenario ul li::before{content:'→';position:absolute;left:0;font-size:10px;}
+.scenario.real ul li::before{color:var(--yellow);}
+.scenario.pess ul li::before{color:var(--gray);}
+.scenario.otim ul li::before{color:var(--green);}
+.scenario .stotal{background:var(--mid);padding:10px 12px;margin-top:14px;border-top:1px solid var(--border);}
+.scenario .stotal .sann{font-size:10px;color:var(--gray);margin-bottom:2px;text-transform:uppercase;letter-spacing:1px;}
+.scenario .stotal .sval{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;}
+.scenario.real .stotal .sval{color:var(--yellow);}
+.scenario.pess .stotal .sval{color:var(--gray);}
+.scenario.otim .stotal .sval{color:var(--green);}
+.scenario .sfn{font-size:9px;color:var(--gray);margin-top:10px;line-height:1.5;}
+
+/* FAKE DOOR */
+.fd-layout{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;}
+.fd-explain h2{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(22px,3vw,36px);text-transform:uppercase;letter-spacing:-1px;margin-bottom:12px;line-height:1.1;}
+.fd-explain p{font-size:13px;line-height:1.8;color:var(--gray);margin-bottom:12px;}
+.rationale{border-left:3px solid var(--yellow);background:var(--dark);padding:14px 18px;margin:20px 0;}
+.rationale p{font-size:12px;color:#ddd;margin:0;line-height:1.7;}
+.results-area{margin-top:20px;border:1px solid var(--border);padding:16px;background:var(--dark);display:none;}
+.results-area h4{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:12px;}
+.result-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.result-row:last-child{border:none;}
+.result-row span:last-child{color:var(--yellow);font-weight:600;}
+.live-counter{margin-top:14px;background:var(--dark);border:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;gap:10px;}
+.dot{width:7px;height:7px;background:var(--yellow);border-radius:50%;animation:pulse 1.5s infinite;flex-shrink:0;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.counter-text{font-size:12px;color:var(--gray);}
+.counter-text strong{color:var(--yellow);}
+
+/* PHONE */
+.phone-wrap{display:flex;justify-content:center;}
+.phone{width:268px;background:#111;border-radius:38px;padding:12px;border:5px solid #222;box-shadow:0 24px 48px rgba(0,0,0,.6);}
+.phone-notch{width:68px;height:20px;background:#111;border-radius:0 0 12px 12px;margin:0 auto 5px;}
+.phone-screen{background:var(--black);border-radius:26px;overflow:hidden;height:500px;display:flex;flex-direction:column;}
+.app-header{background:var(--yellow);padding:12px 15px 10px;}
+.app-logo{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:14px;color:var(--black);letter-spacing:1px;text-transform:uppercase;}
+.app-sub{font-size:8px;color:#555;margin-top:1px;letter-spacing:2px;text-transform:uppercase;font-weight:600;}
+.app-body{flex:1;overflow-y:auto;scrollbar-width:none;}
+.app-body::-webkit-scrollbar{display:none;}
+.app-hero{background:var(--dark);padding:15px;border-bottom:1px solid var(--border);}
+.app-hero .greeting{font-size:9px;color:var(--gray);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px;}
+.app-hero .name{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;color:var(--white);text-transform:uppercase;}
+.vital-strip{display:flex;gap:5px;margin-top:10px;}
+.vital-chip{flex:1;background:var(--mid);border-radius:6px;padding:6px 4px;text-align:center;border:1px solid var(--border);}
+.vital-chip .val{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;color:var(--yellow);}
+.vital-chip .lbl{font-size:7px;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;margin-top:1px;}
+.fd-banner{margin:12px;background:var(--dark);border:2px solid var(--yellow);border-radius:8px;padding:12px;cursor:pointer;transition:all .2s;}
+.fd-banner:hover{background:rgba(255,230,0,.05);}
+.banner-tag{font-size:8px;color:var(--yellow);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;font-weight:700;}
+.banner-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:13px;color:var(--white);margin-bottom:4px;line-height:1.2;text-transform:uppercase;}
+.banner-sub{font-size:9px;color:var(--gray);line-height:1.5;}
+.banner-cta{display:inline-block;margin-top:8px;background:var(--yellow);color:var(--black);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:5px 10px;border-radius:3px;}
+.app-section{padding:0 12px 12px;}
+.app-section-title{font-size:8px;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin:12px 0 7px;}
+.activity-card{background:var(--dark);border-radius:6px;padding:9px;display:flex;align-items:center;gap:7px;margin-bottom:5px;border:1px solid var(--border);}
+.activity-icon{width:26px;height:26px;background:var(--mid);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:12px;}
+.a-title{font-size:10px;font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--white);text-transform:uppercase;}
+.a-sub{font-size:8px;color:var(--gray);margin-top:1px;}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;align-items:center;justify-content:center;padding:32px;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--dark);border:2px solid var(--yellow);width:100%;max-width:440px;animation:fi .3s ease;}
+.modal-bar{background:var(--yellow);padding:12px 20px;display:flex;justify-content:space-between;align-items:center;}
+.modal-bar span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:13px;color:var(--black);letter-spacing:1px;text-transform:uppercase;}
+.modal-close{background:none;border:none;font-size:16px;cursor:pointer;color:var(--black);}
+.modal-body{padding:24px;}
+.step{display:none;}
+.step.active{display:block;}
+.step-q{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;text-transform:uppercase;line-height:1.2;margin-bottom:5px;}
+.step-sub{font-size:12px;color:var(--gray);margin-bottom:16px;line-height:1.6;}
+.options{display:flex;flex-direction:column;gap:7px;}
+.opt-btn{background:var(--mid);border:1px solid var(--border);color:var(--white);font-family:'Barlow',sans-serif;font-size:12px;padding:11px 15px;text-align:left;cursor:pointer;transition:all .15s;}
+.opt-btn:hover,.opt-btn.selected{border-color:var(--yellow);background:rgba(255,230,0,.08);color:var(--yellow);}
+.modal-footer{padding:0 24px 20px;display:flex;justify-content:space-between;align-items:center;}
+.step-indicator{font-size:11px;color:var(--gray);}
+.next-btn{background:var(--yellow);border:none;color:var(--black);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:13px;letter-spacing:1px;text-transform:uppercase;padding:10px 22px;cursor:pointer;transition:opacity .2s;}
+.next-btn:disabled{opacity:.3;cursor:default;}
+.thankyou{text-align:center;}
+.thankyou .ty-icon{font-size:36px;margin-bottom:12px;}
+.thankyou h3{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:24px;text-transform:uppercase;margin-bottom:8px;}
+.thankyou p{font-size:12px;color:var(--gray);line-height:1.7;}
+
+/* ONE-PAGER */
+.op-section{margin-bottom:44px;}
+.op-section p{font-size:14px;line-height:1.8;color:#ccc;max-width:700px;margin-bottom:14px;}
+.op-flow{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-top:20px;}
+.op-step{background:var(--dark);padding:20px;}
+.op-step .sn{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:32px;color:var(--border);line-height:1;margin-bottom:8px;}
+.op-step h4{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;text-transform:uppercase;margin-bottom:5px;color:var(--white);}
+.op-step p{font-size:11px!important;color:var(--gray);line-height:1.6;margin:0;}
+.op-cta{display:inline-block;margin-top:20px;border:2px solid var(--yellow);color:var(--yellow);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:13px;letter-spacing:1px;text-transform:uppercase;padding:10px 22px;cursor:pointer;background:none;transition:all .2s;}
+.op-cta:hover{background:var(--yellow);color:var(--black);}
+
+@media(max-width:768px){
+  header,nav,main{padding-left:20px;padding-right:20px;}
+  .hbody,.g4,.op-flow,.nfc-layout,.fd-layout,.scenario-grid,.pmatrix{grid-template-columns:1fr;}
+  .g2,.g3{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <h1>SmartFit <span style="opacity:.5">|</span> Wellness 3.0</h1>
+    <p>Hipótese estratégica — pesquisado com IA · maio 2026</p>
+  </div>
+  <div class="meta">Ana Paula Batista · Head of Design + Product<br>anapbta@gmail.com · linkedin.com/in/anabatista</div>
+</header>
+
+<nav>
+  <button class="active" onclick="tab('publico',this)">00 · Público</button>
+  <button onclick="tab('evidencia',this)">01 · Evidência</button>
+  <button onclick="tab('hipotese',this)">02 · Hipótese</button>
+  <button onclick="tab('priorizacao',this)">03 · Priorização</button>
+  <button onclick="tab('fakedoor',this)">04 · Fake Door</button>
+  <button onclick="tab('receita',this)">05 · Receita</button>
+  <button onclick="tab('exploracoes',this)">06 · Explorações</button>
+</nav>
+
+<main>
+
+<!-- ===== 00 PÚBLICO ===== -->
+<div id="publico" class="panel active">
+
+  <div class="slabel">O mercado de academias no Brasil</div>
+  <h2 class="disp">Primeiro os dados do setor.<br><em>Depois o recorte SmartFit.</em></h2>
+  <p class="lead">Antes de falar sobre quem é o aluno da SmartFit especificamente, é preciso entender o mercado em que ela opera — e onde ela se posiciona dentro dele.</p>
+
+  <div class="grid1 g3" style="margin-bottom:32px">
+    <div class="card">
+      <div class="bignum">15M</div>
+      <div class="bignum-label">alunos em academias no Brasil em 2024 — crescimento de 50% desde 2019</div>
+      <div class="bigsrc">Panorama Setorial Fitness Brasil 2024 · EY</div>
+    </div>
+    <div class="card">
+      <div class="bignum">7%</div>
+      <div class="bignum-label">penetração da população — vs 25% nos EUA e 15% na Europa. Mercado enorme e subexplorado.</div>
+      <div class="bigsrc">Fitness Brasil · dez/2025</div>
+    </div>
+    <div class="card">
+      <div class="bignum">57mil</div>
+      <div class="bignum-label">academias ativas no Brasil — número quase dobrou desde 2019</div>
+      <div class="bigsrc">Panorama Setorial Fitness Brasil 2024 · EY</div>
+    </div>
+    <div class="card">
+      <div class="bignum">36–45</div>
+      <div class="bignum-label">anos — faixa etária dominante (32% dos praticantes). Seguida por 26–35 anos (26%).</div>
+      <div class="bigsrc">Panorama Setorial Fitness Brasil 2024</div>
+    </div>
+    <div class="card">
+      <div class="bignum">62%</div>
+      <div class="bignum-label">dos praticantes são homens. Mulheres representam 38% — segmento com oportunidade de expansão.</div>
+      <div class="bigsrc">Panorama Setorial Fitness Brasil 2024</div>
+    </div>
+    <div class="card">
+      <div class="bignum">58%</div>
+      <div class="bignum-label">dos frequentadores preferem redes de academia. 36% desejam acompanhamento nutricional — demanda não atendida.</div>
+      <div class="bigsrc">ILUMEO via Mundo do Marketing · jul/2025</div>
+    </div>
+  </div>
+
+  <!-- CAVEAT -->
+  <div style="background:#1a1200;border:2px solid var(--yellow);padding:20px 24px;margin:32px 0;border-radius:2px">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:10px">⚠ Ressalva importante — leia antes de continuar</div>
+    <p style="font-size:13px;line-height:1.8;color:#ddd">Os perfis abaixo <strong style="color:var(--white)">não são dados internos da SmartFit</strong>. São inferências construídas a partir de duas fontes: (1) dados setoriais públicos do mercado de academias no Brasil e (2) o que o próprio Roosevelt descreveu na entrevista. <strong style="color:var(--white)">Antes de qualquer decisão de produto, é imprescindível validar com pesquisa primária</strong> — entrevistas com alunos reais, shadowing nas academias, análise dos dados de uso do app. O que está aqui é ponto de partida para hipótese, não verdade.</p>
+  </div>
+
+  <div class="slabel">Recorte SmartFit — perfis inferidos</div>
+  <h2 class="disp">O que sabemos sobre<br><em>quem é o aluno deles.</em></h2>
+  <p class="lead">A SmartFit é a maior rede low-cost da América Latina. Em 2025, tinha 5,2M de alunos globais e 2,3M no Brasil. O modelo define o perfil: preço acessível, foco em classes C e D, expansão para cidades do interior.</p>
+
+  <!-- PERFIL 1 -->
+  <div style="border:1px solid var(--border);margin-bottom:20px;background:var(--dark)">
+    <div style="background:var(--mid);padding:16px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:42px;color:rgba(255,230,0,.15);line-height:1">01</div>
+      <div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:20px;text-transform:uppercase">O Buscador de Resultado</div>
+        <div style="font-size:11px;color:var(--gray);margin-top:2px">25–40 anos · classe C · hipertrofia ou emagrecimento · citado pelo Roosevelt</div>
+      </div>
+      <div style="margin-left:auto;background:rgba(255,230,0,.1);border:1px solid var(--yellow);padding:4px 10px;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--yellow)" title="Inferência do modelo low-cost — plausível, não comprovado com dados internos da SmartFit">Maior volume ⚠</div>
+    </div>
+    <div style="padding:20px 24px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px">
+      <div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:8px">Motivação principal</div>
+        <p style="font-size:12px;line-height:1.7;color:#bbb">Hipertrofia, emagrecimento, estética. Roosevelt mencionou explicitamente: <em>"tem gente que quer fazer hipertrofia"</em>. Motivação estética predomina: 45% dos jovens Gen Z citam aparência como razão #1 para treinar. <span class="src">USP/EEFERP abr/2026</span></p>
+      </div>
+      <div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:8px">Comportamento digital</div>
+        <p style="font-size:12px;line-height:1.7;color:#bbb">Usa o app para pendências (parquil, pagamento). Não busca conteúdo de wellness — busca resultado visível. Millennials entram pela biologia: a partir dos 30 anos, sarcopenia começa. A rede social mostra isso; a academia resolve. <span class="src">USP abr/2026</span></p>
+      </div>
+      <div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:8px">Oportunidade de produto</div>
+        <p style="font-size:12px;line-height:1.7;color:#bbb">Quer ver progresso — mas o app não mostra. Se o app mostrasse evolução de carga, composição corporal ou frequência semanal, ele teria razão concreta para abri-lo fora da academia.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERFIL 2 -->
+  <div style="border:1px solid var(--border);margin-bottom:20px;background:var(--dark)">
+    <div style="background:var(--mid);padding:16px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:42px;color:rgba(255,230,0,.15);line-height:1">02</div>
+      <div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:20px;text-transform:uppercase">O Iniciante em Risco</div>
+        <div style="font-size:11px;color:var(--gray);margin-top:2px">18–28 anos · Gen Z · primeiros 90 dias · alto risco de churn</div>
+      </div>
+      <div style="margin-left:auto;background:rgba(230,57,70,.1);border:1px solid var(--red);padding:4px 10px;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--red)" title="Inferência — dado de churn 50% é real, mas não confirma que Gen Z é o perfil dominante de churn da SmartFit especificamente">Maior risco ⚠</div>
+    </div>
+    <div style="padding:20px 24px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px">
+      <div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:8px">Quem é</div>
+        <p style="font-size:12px;line-height:1.7;color:#bbb">47% dos novos membros de academias em 2025 são Gen Z <span class="src">ABC Fitness 2025</span>. 70% dos frequentadores de academias globalmente são Gen Z <span class="src">Les Mills</span>. Matriculam por resolução, influência social ou FOMO fitness.</p>
+      </div>
+      <div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:8px">Por que é risco</div>
+        <p style="font-size:12px;line-height:1.7;color:#bbb">50% desistem em 6 meses <span class="src">Glofox 2026</span>. Sem rotina consolidada — vai quando se sente motivado. Falta de progresso visível e de comunidade são as causas principais de abandono nessa faixa.</p>
+      </div>
+      <div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:8px">O que retém</div>
+        <p style="font-size:12px;line-height:1.7;color:#bbb">Comunidade e pertencimento. Academia não é só lugar de suar — é ambiente social. <span class="src">USP abr/2026</span>. Roosevelt citou: <em>"o app passa a ser nosso principal canal de contato com o aluno"</em> — exatamente o que essa geração espera.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERFIL 3 -->
+  <div style="border:1px solid var(--border);margin-bottom:20px;background:var(--dark)">
+    <div style="background:var(--mid);padding:16px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:42px;color:rgba(255,230,0,.15);line-height:1">03</div>
+      <div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:20px;text-transform:uppercase">O Aluno de Longevidade</div>
+        <div style="font-size:11px;color:var(--gray);margin-top:2px">45+ anos · terceira idade ativa · mais leal · citado pelo Roosevelt</div>
+      </div>
+      <div style="margin-left:auto;background:rgba(76,175,80,.1);border:1px solid var(--green);padding:4px 10px;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--green)" title="Inferência do comportamento geral de academias — sem dado direto da SmartFit confirmando isso">Maior lealdade ⚠</div>
+    </div>
+    <div style="padding:20px 24px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px">
+      <div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:8px">Quem é</div>
+        <p style="font-size:12px;line-height:1.7;color:#bbb">Presença de 65+ nas academias cresceu 53,6% no 1º semestre de 2025 vs 2024 <span class="src">Tecnofit ago/2025</span>. Roosevelt citou literalmente: <em>"poder carregar a sacola do supermercado, ser independente"</em> — motivação de saúde funcional, não estética.</p>
+      </div>
+      <div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:8px">Por que importa</div>
+        <p style="font-size:12px;line-height:1.7;color:#bbb">Condicionamento físico para idosos é a tendência #1 no Brasil segundo o ACSM <span class="src">CNN Brasil out/2024</span>. IBGE projeta que 25% da população terá 60+ anos até 2040. Em 2024, 4 mortes a cada 15 min seriam evitáveis com atividade física. <span class="src">Metrópoles mai/2026</span></p>
+      </div>
+      <div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:8px">Desafio de produto</div>
+        <p style="font-size:12px;line-height:1.7;color:#bbb">Mais leais, menos digitais. Não querem apps complexos. A solução precisa ser simples e entregar valor imediato. Monitoramento de saúde contínuo (pressão, sono, recuperação) faz sentido — mas a interface tem que ser acessível.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="tension">
+    <div class="tlabel">⚠ A tensão que define toda a estratégia de produto</div>
+    <p>O aluno típico da SmartFit <strong>quer saúde e bem-estar</strong> — a barreira não é desejo, é acesso, fricção e custo percebido. 73% dos brasileiros pretendem aumentar a prática de exercícios <span class="src" style="color:#111;border-color:#111">ILUMEO 2025</span> — esse movimento é transversal a classes sociais. O que muda no público low-cost é que a mensalidade já representa <strong>7–10% do salário mínimo</strong> <span class="src" style="color:#111;border-color:#111">HFA via Blog Pacto 2026</span>: qualquer custo adicional — de dinheiro, tempo ou aprendizado — precisa ter valor percebido imediato e claro. A pergunta não é "que tecnologia usar" — é "que problema real cada perfil quer resolver, e com qual esforço ele está disposto a resolver".</p>
+  </div>
+
+  <div style="background:var(--dark);border:1px solid var(--border);padding:20px 24px;margin:24px 0">
+    <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-bottom:14px">⚠ De onde vieram os rótulos dos perfis — leia antes de apresentar</div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <div style="background:rgba(255,230,0,.15);border:1px solid var(--yellow);color:var(--yellow);font-size:9px;font-weight:700;padding:2px 7px;white-space:nowrap;margin-top:2px">MAIOR VOLUME</div>
+        <p style="font-size:12px;color:#bbb;line-height:1.6">Inferência do modelo low-cost: academias de baixo custo tendem a concentrar alunos de resultado (musculação/emagrecimento) como volume principal. Plausível, mas não comprovado com dados internos da SmartFit.</p>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <div style="background:rgba(230,57,70,.15);border:1px solid var(--red);color:var(--red);font-size:9px;font-weight:700;padding:2px 7px;white-space:nowrap;margin-top:2px">MAIOR RISCO</div>
+        <p style="font-size:12px;color:#bbb;line-height:1.6">O dado de 50% de churn em 6 meses é real <span class="src">Glofox 2026</span> e o perfil jovem sem rotina consolidada tem respaldo. A associação Gen Z = Perfil de maior risco não está confirmada para a base da SmartFit especificamente — pode ser o perfil de resolução de ano novo, que é transversal a faixas etárias.</p>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <div style="background:rgba(76,175,80,.15);border:1px solid var(--green);color:var(--green);font-size:9px;font-weight:700;padding:2px 7px;white-space:nowrap;margin-top:2px">MAIOR LEALDADE</div>
+        <p style="font-size:12px;color:#bbb;line-height:1.6">Inferência do comportamento geral de academias: pessoas mais velhas tendem a frequentar por saúde funcional (não por resolução sazonal), o que historicamente gera maior retenção. Não há dados da SmartFit confirmando este comportamento na base deles.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== 01 EVIDÊNCIA ===== -->
+<div id="evidencia" class="panel">
+  <div class="slabel">Dados de mercado coletados com IA</div>
+  <h2 class="disp">O problema não é aquisição.<br><em>É o que acontece depois.</em></h2>
+  <p class="lead">Pesquisa realizada com IA em maio de 2026. Todas as afirmações têm fonte citada e são verificáveis.</p>
+
+  <div class="grid1 g3">
+    <div class="card"><div class="bignum">67%</div><div class="bignum-label">das matrículas ficam sem uso ou com uso raro</div><div class="bigsrc">ABC Glofox · 2025</div></div>
+    <div class="card"><div class="bignum">50%</div><div class="bignum-label">dos novos alunos desistem nos primeiros 6 meses — falta de engajamento é a causa</div><div class="bigsrc">Glofox · SmartHealthClubs · 2025</div></div>
+    <div class="card"><div class="bignum">5×</div><div class="bignum-label">mais caro adquirir um novo aluno do que reter um existente</div><div class="bigsrc">IHRSA via GymMaster · 2025</div></div>
+    <div class="card"><div class="bignum">75%</div><div class="bignum-label">dos membros permaneceriam com planos personalizados e tracking de progresso</div><div class="bigsrc">SmartHealthClubs · 2025</div></div>
+    <div class="card"><div class="bignum">60%</div><div class="bignum-label">mais chance de continuar para alunos que atingem marcos nos primeiros 90 dias</div><div class="bigsrc">SmartHealthClubs · 2025</div></div>
+    <div class="card"><div class="bignum">7–10%</div><div class="bignum-label">do salário mínimo é o que a mensalidade representa no Brasil (vs. 1–2% nos EUA)</div><div class="bigsrc">HFA via Blog Pacto · 2026</div></div>
+  </div>
+
+  <div class="callout">
+    <span class="ctag">Implicação para o modelo low-cost</span>
+    <p>Reter é mais estratégico no Brasil do que em qualquer mercado desenvolvido. O aluno paga proporcionalmente mais, a margem é apertada, e o custo de aquisição é alto. Um aumento de 5% na retenção pode aumentar lucros em 25–95%. <span class="src">Reichheld via ABC Glofox</span></p>
+  </div>
+
+  <div class="callout">
+    <span class="ctag">Os primeiros 90 dias são o campo de batalha</span>
+    <p>Membros que frequentam pelo menos 2x/semana têm 50% menos chance de cancelar <span class="src">IHRSA via PerfectGym</span>. Academias com engajamento ativo reduzem churn em 10–15% <span class="src">Gitnux 2025</span>. O hábito não se forma sozinho — precisa de sinal externo. O app é o único canal disponível fora da academia.</p>
+  </div>
+</div>
+
+<!-- ===== 02 HIPÓTESE ===== -->
+<div id="hipotese" class="panel">
+  <div class="slabel">Hipóteses estratégicas</div>
+  <h2 class="disp">Três perguntas.<br><em>Uma para testar agora.</em></h2>
+  <p class="lead">Hipóteses construídas a partir do público real e da evidência coletada.</p>
+
+  <div class="hcard featured">
+    <div class="hhead">
+      <div class="hnum">01</div>
+      <div>
+        <div class="htitle">O aluno para de ir porque não vê progresso — não por falta de vontade.</div>
+        <span class="badge">Prioritária</span>
+      </div>
+    </div>
+    <div class="hbody">
+      <div class="hsec"><h4>O que acreditamos</h4><p>O app conhece o treino dentro da academia. O celular (ou wearable) mede o que acontece fora. Combinando os dois, criamos um "Resumo Semanal de Evolução" que devolve ao aluno o sinal de progresso que ele não vê no espelho nos primeiros 90 dias.</p></div>
+      <div class="hsec"><h4>Por que é viável para este público</h4><p>Não precisa de Apple Watch. O celular já tem acelerômetro para passos. A Xiaomi Band (R$180) já exporta sono e FC. O valor está na combinação: dado do treino (SmartFit) + dado do comportamento externo — algo que nenhum dos dois gera sozinho.</p></div>
+      <div class="hsec"><h4>O que o dado confirma</h4><p>75% permaneceriam com tracking personalizado <span class="src">SmartHealthClubs 2025</span>. Alunos com marcos nos primeiros 90 dias têm 60% mais chance de continuar <span class="src">SmartHealthClubs 2025</span>. O sinal de progresso é o produto.</p></div>
+    </div>
+  </div>
+
+  <div class="hcard">
+    <div class="hhead">
+      <div class="hnum">02</div>
+      <div class="htitle">A passagem pela catraca é o momento de maior abertura do aluno — e a SmartFit não aproveita.</div>
+    </div>
+    <div class="hbody">
+      <div class="hsec"><h4>O que acreditamos</h4><p>O check-in é o único momento em que o aluno está 100% presente e motivado. Um push nesse instante com uma micro-pergunta cria dado comportamental valioso e aumenta vínculo com o app.</p></div>
+      <div class="hsec"><h4>Como testar</h4><p>Push no check-in, 3 opções de resposta. Correlacionar com frequência de retorno em 30 dias. Zero custo de engenharia além do push já existente.</p></div>
+      <div class="hsec"><h4>O que o dado confirma</h4><p>Academias com comunicação consistente têm 20% mais renovações <span class="src">Gitnux 2025</span>. Membros com updates de progresso têm 27% mais chance de renovar <span class="src">Gitnux 2025</span>.</p></div>
+    </div>
+  </div>
+
+  <div class="hcard">
+    <div class="hhead">
+      <div class="hnum">03</div>
+      <div class="htitle">Gen Z fica pela comunidade — e a SmartFit tem escala para criar isso, mas não tem o produto digital.</div>
+    </div>
+    <div class="hbody">
+      <div class="hsec"><h4>O que acreditamos</h4><p>47% dos novos membros em 2025 são Gen Z <span class="src">ABC Fitness 2025</span>. Comunidade é o fator #1 de retenção. 2.084 unidades = comunidade geográfica natural que o app não explora.</p></div>
+      <div class="hsec"><h4>Como testar</h4><p>Fake door: tela de "Desafio da semana" entre membros da mesma unidade. Medir intenção de participar antes de construir qualquer funcionalidade.</p></div>
+      <div class="hsec"><h4>O que o dado confirma</h4><p>Participantes de aula em grupo têm 56% mais retenção <span class="src">SmartHealthClubs 2025</span>. Comunidade é fator #1 para Gen Z <span class="src">ABC Fitness Fall 2025</span>.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 03 PRIORIZAÇÃO ===== -->
+<div id="priorizacao" class="panel">
+  <div class="slabel">Framework de priorização — Lean Hypothesis Canvas</div>
+  <h2 class="disp">Hipóteses só existem<br><em>para serem testadas.</em></h2>
+  <p class="lead">Usamos o Lean Hypothesis Canvas para estruturar cada hipótese antes de priorizá-la. A lógica: primeiro formular a crença, depois o experimento, depois a métrica — nunca ao contrário.</p>
+
+  <!-- AVISO PESQUISA -->
+  <div style="background:#0a0a1a;border:2px solid var(--blue);padding:20px 24px;margin:0 0 36px;border-radius:2px">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:10px">🔬 Etapa obrigatória antes de qualquer teste</div>
+    <p style="font-size:14px;line-height:1.8;color:#ddd"><strong style="color:var(--white)">Todas as hipóteses abaixo são especulativas.</strong> Foram construídas a partir de dados de mercado e da conversa com Roosevelt — não de dados de usuários reais da SmartFit. A etapa seguinte antes de qualquer experimento seria <strong style="color:var(--white)">pesquisa primária com usuários</strong>: entrevistas exploratórias com alunos dos 3 perfis, shadowing dentro das academias, e análise do comportamento real no app. Sem isso, corremos o risco de testar a coisa certa da forma errada — ou a coisa errada com muito esforço.</p>
+  </div>
+
+  <!-- LEAN CANVAS HEADER -->
+  <div class="slabel">O framework: Lean Hypothesis Canvas</div>
+  <div style="background:var(--dark);border:1px solid var(--border);padding:20px 24px;margin-bottom:32px">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border)">
+      <div style="background:var(--mid);padding:14px;text-align:center">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:6px">Acreditamos que</div>
+        <p style="font-size:11px;color:#bbb;line-height:1.5">Qual é a crença central? O problema que identificamos e para quem.</p>
+      </div>
+      <div style="background:var(--mid);padding:14px;text-align:center">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:6px">Para validar</div>
+        <p style="font-size:11px;color:#bbb;line-height:1.5">O experimento mais simples possível. Mínimo custo de engenharia.</p>
+      </div>
+      <div style="background:var(--mid);padding:14px;text-align:center">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:6px">Mediremos</div>
+        <p style="font-size:11px;color:#bbb;line-height:1.5">A métrica específica que indica aprendizado. Não vaidade — sinal real.</p>
+      </div>
+      <div style="background:var(--mid);padding:14px;text-align:center">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:6px">Critério de sucesso</div>
+        <p style="font-size:11px;color:#bbb;line-height:1.5">O número mínimo que confirma a hipótese. Definido antes do teste.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- H1 LEAN CANVAS -->
+  <div style="border:1px solid var(--yellow);margin-bottom:20px;background:var(--dark)">
+    <div style="background:rgba(255,230,0,.06);padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:36px;color:rgba(255,230,0,.2);line-height:1">H1</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:17px;text-transform:uppercase;flex:1">Progresso invisível = churn precoce</div>
+      <span class="badge">Prioridade 1</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border)">
+      <div style="background:var(--dark);padding:16px">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:8px">Acreditamos que</div>
+        <p style="font-size:12px;line-height:1.7;color:#bbb">O aluno para de ir nos primeiros 90 dias não por falta de vontade, mas porque não vê progresso concreto. Sem feedback, a motivação cai antes do hábito se formar.</p>
+      </div>
+      <div style="background:var(--dark);padding:16px">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:8px">Para validar</div>
+        <p style="font-size:12px;line-height:1.7;color:#bbb">Fake door no app: banner convidando a conectar o celular para receber um "Resumo Semanal de Evolução". Fluxo de 3 perguntas conversacionais. Sem custo de engenharia.</p>
+      </div>
+      <div style="background:var(--dark);padding:16px">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:8px">Mediremos</div>
+        <p style="font-size:12px;line-height:1.7;color:#bbb">Taxa de conclusão do fluxo (quem chega até a pergunta 3). Segmento: alunos com 30–60 dias de cadastro. Dado salvo em planilha.</p>
+      </div>
+      <div style="background:var(--dark);padding:16px">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:8px">Critério de sucesso</div>
+        <p style="font-size:12px;line-height:1.7;color:#bbb"><strong style="color:var(--white)">&gt;20%</strong> de quem vê o banner completa o fluxo. Se sim: construir MVP. Se não: entrevistar quem abandonou e reformular.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- H2 LEAN CANVAS -->
+  <div style="border:1px solid var(--border);margin-bottom:20px;background:var(--dark)">
+    <div style="background:var(--mid);padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:36px;color:rgba(255,255,255,.1);line-height:1">H2</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:17px;text-transform:uppercase;flex:1">Check-in como momento de engajamento</div>
+      <span style="font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border:1px solid var(--gray);color:var(--gray)">Prioridade 2</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border)">
+      <div style="background:var(--dark);padding:16px">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:8px">Acreditamos que</div>
+        <p style="font-size:12px;line-height:1.7;color:#bbb">O momento do check-in é o pico de motivação do aluno — ele está presente, decidido. A SmartFit não aproveita esse instante para criar conexão além do controle de acesso.</p>
+      </div>
+      <div style="background:var(--dark);padding:16px">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:8px">Para validar</div>
+        <p style="font-size:12px;line-height:1.7;color:#bbb">Push notification disparado automaticamente no check-in com uma micro-pergunta: "Como você quer se sentir hoje?" — 3 opções. Zero custo de engenharia (push já existe).</p>
+      </div>
+      <div style="background:var(--dark);padding:16px">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:8px">Mediremos</div>
+        <p style="font-size:12px;line-height:1.7;color:#bbb">Taxa de resposta ao push. Correlação entre quem responde e frequência de retorno nos 30 dias seguintes vs quem não responde.</p>
+      </div>
+      <div style="background:var(--dark);padding:16px">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:8px">Critério de sucesso</div>
+        <p style="font-size:12px;line-height:1.7;color:#bbb"><strong style="color:var(--white)">&gt;30%</strong> de taxa de resposta ao push E frequência de retorno &gt;10% maior em quem responde vs quem não responde.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- H3 LEAN CANVAS -->
+  <div style="border:1px solid var(--border);margin-bottom:20px;background:var(--dark)">
+    <div style="background:var(--mid);padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:36px;color:rgba(255,255,255,.1);line-height:1">H3</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:17px;text-transform:uppercase;flex:1">Comunidade local retém Gen Z</div>
+      <span style="font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border:1px solid var(--gray);color:var(--gray)">Prioridade 3</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border)">
+      <div style="background:var(--dark);padding:16px">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:8px">Acreditamos que</div>
+        <p style="font-size:12px;line-height:1.7;color:#bbb">Gen Z fica na academia por senso de pertencimento, não por infraestrutura. A SmartFit tem 2.084 unidades — comunidade geográfica natural que o app não explora.</p>
+      </div>
+      <div style="background:var(--dark);padding:16px">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:8px">Para validar</div>
+        <p style="font-size:12px;line-height:1.7;color:#bbb">Fake door: tela simulando um "Desafio de passos da semana" entre alunos da mesma unidade. Pergunta: "Você participaria?" com 3 opções de resposta.</p>
+      </div>
+      <div style="background:var(--dark);padding:16px">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:8px">Mediremos</div>
+        <p style="font-size:12px;line-height:1.7;color:#bbb">Intenção de participar ("Sim, com certeza") segmentada por faixa etária. Hipótese mais forte para 18–28 anos — os dados vão confirmar ou refutar esse recorte.</p>
+      </div>
+      <div style="background:var(--dark);padding:16px">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:8px">Critério de sucesso</div>
+        <p style="font-size:12px;line-height:1.7;color:#bbb"><strong style="color:var(--white)">&gt;35%</strong> de "Sim, com certeza" entre 18–28 anos. Se sim: protótipo de ranking real em 2–3 unidades piloto.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- NFC LEAN CANVAS -->
+  <div style="border:1px solid var(--border);margin-bottom:32px;background:var(--dark)">
+    <div style="background:var(--mid);padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:36px;color:rgba(255,255,255,.1);line-height:1">NFC</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:17px;text-transform:uppercase;flex:1">Tracking automático por equipamento</div>
+      <span style="font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border:1px solid var(--gray);color:var(--gray)">Futuro — validar intenção primeiro</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border)">
+      <div style="background:var(--dark);padding:16px">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:8px">Acreditamos que</div>
+        <p style="font-size:12px;line-height:1.7;color:#bbb">O aluno não registra o treino manualmente porque é fricção. Se o celular registrasse automaticamente ao aproximar de cada máquina, o histórico de treino seria completo e sem esforço.</p>
+      </div>
+      <div style="background:var(--dark);padding:16px">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:8px">Para validar (sem instalar nada)</div>
+        <p style="font-size:12px;line-height:1.7;color:#bbb">Fake door no app perguntando: "Você passaria o celular na máquina para registrar o treino automaticamente?" — antes de qualquer piloto físico com tags reais.</p>
+      </div>
+      <div style="background:var(--dark);padding:16px">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:8px">Mediremos</div>
+        <p style="font-size:12px;line-height:1.7;color:#bbb">Intenção de uso ("Sim, toda vez") e consistência percebida ("Lembraria de fazer?"). Custo zero de hardware na fase de intenção.</p>
+      </div>
+      <div style="background:var(--dark);padding:16px">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:8px">Critério de sucesso</div>
+        <p style="font-size:12px;line-height:1.7;color:#bbb"><strong style="color:var(--white)">&gt;40%</strong> de intenção "toda vez" → piloto físico em 1 unidade com 20 máquinas. Abaixo disso: reformular a interação antes de investir em hardware.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCORING TABLE -->
+  <div class="slabel">Priorização comparativa</div>
+  <table class="scoring-table">
+    <thead>
+      <tr>
+        <th>Hipótese</th>
+        <th>Impacto retenção</th>
+        <th>Custo validação</th>
+        <th>Velocidade</th>
+        <th>Alinhamento W3.0</th>
+        <th>Independência</th>
+        <th>Score</th>
+        <th>Próximo passo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="winner-row">
+        <td><strong>H1 · Resumo Semanal</strong><br><span style="font-size:10px;color:var(--gray)">Progresso visível → reduz churn</span></td>
+        <td><span class="score-badge hi">9</span></td>
+        <td><span class="score-badge hi">8</span></td>
+        <td><span class="score-badge hi">8</span></td>
+        <td><span class="score-badge hi">9</span></td>
+        <td><span class="score-badge hi">7</span></td>
+        <td style="font-family:'Barlow Condensed';font-weight:900;font-size:22px;color:var(--yellow)">8.4</td>
+        <td><span class="badge">Fake door — semana 1</span></td>
+      </tr>
+      <tr>
+        <td><strong>H2 · Push check-in</strong><br><span style="font-size:10px;color:var(--gray)">Micro-engajamento na entrada</span></td>
+        <td><span class="score-badge mid">7</span></td>
+        <td><span class="score-badge hi">9</span></td>
+        <td><span class="score-badge hi">9</span></td>
+        <td><span class="score-badge mid">6</span></td>
+        <td><span class="score-badge hi">9</span></td>
+        <td style="font-family:'Barlow Condensed';font-weight:900;font-size:22px;color:var(--gray)">7.8</td>
+        <td style="font-size:12px;color:#bbb">Push test — semana 1 (paralelo)</td>
+      </tr>
+      <tr>
+        <td><strong>H3 · Comunidade Gen Z</strong><br><span style="font-size:10px;color:var(--gray)">Desafio entre alunos da unidade</span></td>
+        <td><span class="score-badge mid">7</span></td>
+        <td><span class="score-badge mid">6</span></td>
+        <td><span class="score-badge mid">6</span></td>
+        <td><span class="score-badge mid">7</span></td>
+        <td><span class="score-badge hi">8</span></td>
+        <td style="font-family:'Barlow Condensed';font-weight:900;font-size:22px;color:var(--gray)">6.7</td>
+        <td style="font-size:12px;color:#bbb">Fake door — semana 2</td>
+      </tr>
+      <tr>
+        <td><strong>NFC · Tracking por máquina</strong><br><span style="font-size:10px;color:var(--gray)">Tag nas máquinas → histórico automático</span></td>
+        <td><span class="score-badge hi">9</span></td>
+        <td><span class="score-badge lo">3</span></td>
+        <td><span class="score-badge lo">3</span></td>
+        <td><span class="score-badge hi">10</span></td>
+        <td><span class="score-badge lo">4</span></td>
+        <td style="font-family:'Barlow Condensed';font-weight:900;font-size:22px;color:var(--gray)">5.7</td>
+        <td style="font-size:12px;color:#bbb">Intenção primeiro → piloto físico mês 2</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+</div>
+
+<!-- ===== 05 RECEITA ===== -->
+<div id="receita" class="panel">
+  <div class="slabel">Estratégia de upsell e monetização</div>
+  <h2 class="disp">SmartFit já sabe fazer upsell.<br><em>Esse seria o próximo.</em></h2>
+  <p class="lead">A SmartFit já oferece serviços adicionais à mensalidade. O Resumo de Evolução (tracking) se encaixa naturalmente nessa estrutura. Abaixo, os produtos atuais e a proposta de precificação do novo serviço.</p>
+
+  <div class="slabel" style="margin-top:8px">Upsells atuais no site smartfit.com.br</div>
+  <div class="upsell-grid">
+    <div class="upsell-card">
+      <div class="uname">Smart Fit Body</div>
+      <div class="uprice">R$19,90<span style="font-size:14px;font-weight:400">/mês</span></div>
+      <p>Bioimpedância + acompanhamento corporal. 12 meses de permanência.</p>
+      <div class="fn">smartfit.com.br/planos · mai/2026</div>
+    </div>
+    <div class="upsell-card">
+      <div class="uname">Smart Fit Coach</div>
+      <div class="uprice">R$39,90<span style="font-size:14px;font-weight:400">/mês</span></div>
+      <p>Treino online personalizado por treinador. 12 meses de permanência.</p>
+      <div class="fn">smartfit.com.br/planos · mai/2026</div>
+    </div>
+    <div class="upsell-card">
+      <div class="uname">Smart Fit Energy</div>
+      <div class="uprice">R$24,90<span style="font-size:14px;font-weight:400">/mês</span></div>
+      <p>Bebidas esportivas. Acesso a bebidas antes, durante e depois do treino.</p>
+      <div class="fn">smartfit.com.br/planos · mai/2026</div>
+    </div>
+    <div class="upsell-card">
+      <div class="uname">Coach + Body Combo</div>
+      <div class="uprice">R$24,90<span style="font-size:14px;font-weight:400">/mês</span></div>
+      <p>Bioimpedância + consultoria de treino. Bundle com desconto.</p>
+      <div class="fn">smartfit.com.br/planos · mai/2026</div>
+    </div>
+    <div class="upsell-card" style="border:2px solid var(--yellow)">
+      <div class="uname">Smart Fit <em style="color:var(--yellow)">Evolução</em></div>
+      <div class="uprice" style="color:var(--yellow)">R$19,90<span style="font-size:14px;font-weight:400;color:var(--white)">/mês</span></div>
+      <p style="color:#aaa">PROPOSTA NOVA: Resumo semanal de evolução + insights personalizados via IA.</p>
+      <div class="fn">Proposta · Ana Paula Batista · mai/2026</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="ctag">Lógica de precificação</span>
+    <p>O Smart Fit Body (bioimpedância) custa R$19,90/mês e entrega dados corporais mensais. O Resumo de Evolução é mais completo — dados semanais, comportamento externo, IA — mas precisa ser acessível para atingir maior penetração. <strong>R$19,90/mês</strong> posiciona no mesmo patamar do Body, permitindo bundle. Versão freemium básica (só celular) poderia ser gratuita para aumentar base e converter para o pago. <span class="src">Lógica baseada nos preços publicados em smartfit.com.br/planos mai/2026</span></p>
+  </div>
+
+  <div class="slabel" style="margin-top:36px">Projeção de receita — 3 cenários</div>
+  <p class="lead">Base de cálculo: SmartFit Brasil com ~4,5 milhões de alunos <span class="src">SmartFit RI 2024</span>. Ticket do upsell: R$19,90/mês. Penetração estimada com base em benchmarks de upsell em academias: <a href="https://www.glofox.com/blog/gym-membership-statistics/" target="_blank" style="color:var(--blue);font-size:11px">Glofox Gym Statistics 2026</a> · <a href="https://www.ihrsa.org/improve-your-club/industry-data/" target="_blank" style="color:var(--blue);font-size:11px">IHRSA Industry Data</a> · <a href="https://www.smarthealthclubs.com/resources/" target="_blank" style="color:var(--blue);font-size:11px">SmartHealthClubs 2025</a>. Upsells de serviços digitais em academias variam de 1–8% da base ativa dependendo do produto e da estratégia de lançamento.</p>
+
+  <div class="scenario-grid">
+    <div class="scenario pess">
+      <div class="scen-label">Pessimista</div>
+      <h3>1%</h3>
+      <div class="sarrow">↳ de penetração na base Brasil</div>
+      <ul>
+        <li>45.000 alunos assinantes</li>
+        <li>Adoção lenta — produto novo sem validação forte</li>
+        <li>Baixo marketing, rollout gradual</li>
+        <li>Churn do upsell: 40%/ano</li>
+        <li>Custo de operação alto no início</li>
+      </ul>
+      <div class="stotal">
+        <div class="sann">Receita mensal</div>
+        <div class="sval">R$ 895 mil</div>
+        <div class="sann" style="margin-top:6px">Receita anual</div>
+        <div class="sval">R$ 10,7 mi</div>
+      </div>
+      <div class="sfn">4,5M alunos × 1% = 45K × R$19,90 = R$895K/mês<br>Fonte base: SmartFit RI 4T24 · mar/2025</div>
+    </div>
+
+    <div class="scenario real">
+      <div class="scen-label">⭐ Realista</div>
+      <h3>3%</h3>
+      <div class="sarrow">↳ de penetração na base Brasil</div>
+      <ul>
+        <li>135.000 alunos assinantes</li>
+        <li>Comparável ao Smart Coach atual</li>
+        <li>Campanha de lançamento + bundle com Body</li>
+        <li>Churn do upsell: 25%/ano</li>
+        <li>Campanha de lançamento + bundle com Body</li>
+      </ul>
+      <div class="stotal">
+        <div class="sann">Receita mensal</div>
+        <div class="sval">R$ 2,7 mi</div>
+        <div class="sann" style="margin-top:6px">Receita anual</div>
+        <div class="sval">R$ 32,3 mi</div>
+      </div>
+      <div class="sfn">4,5M × 3% = 135K × R$19,90 = R$2,7M/mês<br>Benchmark: Body/Coach upsells SmartFit (estimados ~2–4%)<br>Fonte: smartfit.com.br/planos + SmartFit RI 4T24</div>
+    </div>
+
+    <div class="scenario otim">
+      <div class="scen-label">Otimista</div>
+      <h3>7%</h3>
+      <div class="sarrow">↳ de penetração na base Brasil</div>
+      <ul>
+        <li>315.000 alunos assinantes</li>
+        <li>Produto vira diferencial competitivo de marca</li>
+        <li>Tracking por QR/NFC + parceria com wearable</li>
+        <li>Freemium converte para pago em escala</li>
+        <li>Expansão América Latina (+2.000 unidades)</li>
+      </ul>
+      <div class="stotal">
+        <div class="sann">Receita mensal</div>
+        <div class="sval">R$ 6,3 mi</div>
+        <div class="sann" style="margin-top:6px">Receita anual</div>
+        <div class="sval">R$ 75,2 mi</div>
+      </div>
+      <div class="sfn">4,5M × 7% = 315K × R$19,90 = R$6,3M/mês<br>Benchmark: Peloton digital (~8% conversão), Nike Run Club Premium<br>Fonte: Glofox 2026 · Peloton 2024 Annual Report</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="ctag">Impacto além da receita direta</span>
+    <p>O valor real pode ser na retenção. Se o serviço aumenta retenção em 5%, e o ticket médio da SmartFit é ~R$120/mês com 4,5M de alunos: <strong>5% × 4,5M × R$120 = R$27M/mês de receita preservada</strong>. O upsell é a feature. A retenção é o negócio. <span class="src">Base: SmartFit RI 4T24 · Reichheld retention model</span></p>
+  </div>
+</div>
+
+<!-- ===== 04 FAKE DOOR ===== -->
+<div id="fakedoor" class="panel">
+  <div class="fd-layout">
+    <div class="fd-explain">
+      <div class="slabel">04 · Artefato de validação</div>
+      <h2>Fake door funcional.<br><em>Rodando agora.</em></h2>
+      <p>Simula o banner no app SmartFit convidando o aluno a ativar o "Resumo Semanal de Evolução" — um resumo personalizado de saúde e treino enviado por e-mail toda semana.</p>
+      <p>Objetivo: medir intenção real antes de qualquer custo de engenharia. Cada resposta ao fluxo de 3 perguntas é uma micro-conversão mensurável.</p>
+
+      <div class="rationale">
+        <p><strong>Por que fluxo conversacional e não form?</strong> Um clique mede curiosidade. Responder 3 perguntas mede comprometimento real. Aprendi isso testando fake doors no Will Bank: quem completa o fluxo tem intenção genuína — o dado é muito mais confiável do que taxa de clique.</p>
+      </div>
+
+      <div style="background:var(--dark);border:1px solid var(--border);padding:16px 20px;margin:16px 0">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:10px">⚙ Como seria integrado em produção</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <div style="background:var(--yellow);color:var(--black);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:10px;padding:2px 7px;flex-shrink:0;margin-top:2px">1</div>
+            <p style="font-size:12px;color:#bbb;line-height:1.5">Aluno preenche o fluxo no app → respostas enviadas via webhook para <strong style="color:var(--white)">n8n</strong></p>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <div style="background:var(--yellow);color:var(--black);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:10px;padding:2px 7px;flex-shrink:0;margin-top:2px">2</div>
+            <p style="font-size:12px;color:#bbb;line-height:1.5">n8n salva automaticamente em <strong style="color:var(--white)">planilha Google Sheets</strong> — dispositivo, objetivo, interesse, e-mail e timestamp</p>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <div style="background:var(--yellow);color:var(--black);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:10px;padding:2px 7px;flex-shrink:0;margin-top:2px">3</div>
+            <p style="font-size:12px;color:#bbb;line-height:1.5">n8n dispara <strong style="color:var(--white)">e-mail automático</strong> confirmando a inscrição e simulando o primeiro resumo semanal — valida o valor percebido antes de construir</p>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <div style="background:var(--yellow);color:var(--black);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:10px;padding:2px 7px;flex-shrink:0;margin-top:2px">4</div>
+            <p style="font-size:12px;color:#bbb;line-height:1.5">Em 2 semanas: análise da planilha → decisão de construir ou pivotar. Custo total: <strong style="color:var(--white)">zero de engenharia</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <p style="color:var(--gray);font-size:13px;margin-top:8px">Toque no banner ao lado para vivenciar o fluxo →</p>
+
+      <div class="results-area" id="results-area">
+        <h4>Simulação — dados que iriam para a planilha</h4>
+        <div class="result-row"><span>Dispositivo</span><span id="r-wearable">—</span></div>
+        <div class="result-row"><span>Objetivo</span><span id="r-objetivo">—</span></div>
+        <div class="result-row"><span>Interesse</span><span id="r-interesse">—</span></div>
+        <div class="result-row"><span>E-mail</span><span id="r-email">—</span></div>
+        <div class="result-row"><span>Status</span><span style="color:var(--green)">✓ Iria para planilha + e-mail automático</span></div>
+      </div>
+
+      <div class="live-counter">
+        <div class="dot"></div>
+        <div class="counter-text"><strong id="counter">0</strong> pessoas completaram o fluxo nessa sessão</div>
+      </div>
+    </div>
+
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="app-header">
+            <div class="app-logo">SmartFit</div>
+            <div class="app-sub">Wellness 3.0</div>
+          </div>
+          <div class="app-body">
+            <div class="app-hero">
+              <div class="greeting">Bom dia</div>
+              <div class="name">Maria ✦</div>
+              <div class="vital-strip">
+                <div class="vital-chip"><div class="val">72</div><div class="lbl">BPM</div></div>
+                <div class="vital-chip"><div class="val">7h2</div><div class="lbl">Sono</div></div>
+                <div class="vital-chip"><div class="val">84%</div><div class="lbl">Rec.</div></div>
+              </div>
+            </div>
+            <div class="app-section">
+              <div class="fd-banner" onclick="openModal()">
+                <div class="banner-tag">⚡ Novidade SmartFit</div>
+                <div class="banner-title">Receba seu Resumo Semanal de Saúde</div>
+                <div class="banner-sub">Todo domingo no seu e-mail: sua evolução de treino, sono e recuperação — personalizado pra você.</div>
+                <div class="banner-cta">Quero receber →</div>
+              </div>
+              <div class="app-section-title">Sua semana</div>
+              <div class="activity-card"><div class="activity-icon">🏋️</div><div><div class="a-title">Musculação · Seg</div><div class="a-sub">48 min · 380 kcal</div></div></div>
+              <div class="activity-card"><div class="activity-icon">🚴</div><div><div class="a-title">Bike · Qua</div><div class="a-sub">35 min · 290 kcal</div></div></div>
+              <div class="activity-card"><div class="activity-icon">🧘</div><div><div class="a-title">Yoga · Sex</div><div class="a-sub">60 min · 180 kcal</div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL — 4 steps incluindo email -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-bar">
+      <span>SmartFit · Resumo Semanal</span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="step active" id="s1">
+        <div class="step-q">Você usa algum dispositivo no dia a dia?</div>
+        <div class="step-sub">Smartwatch, pulseira ou só o celular mesmo</div>
+        <div class="options">
+          <button class="opt-btn" onclick="sel(this,'s1')">📱 Só o celular</button>
+          <button class="opt-btn" onclick="sel(this,'s1')">⌚ Smartband (Xiaomi, Amazfit…)</button>
+          <button class="opt-btn" onclick="sel(this,'s1')">🟡 Smartwatch (Samsung, Garmin…)</button>
+          <button class="opt-btn" onclick="sel(this,'s1')">🍎 Apple Watch</button>
+        </div>
+      </div>
+      <div class="step" id="s2">
+        <div class="step-q">Qual é o seu principal objetivo agora?</div>
+        <div class="step-sub">Além de manter a forma</div>
+        <div class="options">
+          <button class="opt-btn" onclick="sel(this,'s2')">💪 Ganhar massa muscular</button>
+          <button class="opt-btn" onclick="sel(this,'s2')">🔥 Emagrecer</button>
+          <button class="opt-btn" onclick="sel(this,'s2')">❤️ Saúde cardiovascular</button>
+          <button class="opt-btn" onclick="sel(this,'s2')">😴 Melhorar sono e energia</button>
+        </div>
+      </div>
+      <div class="step" id="s3">
+        <div class="step-q">Todo domingo no seu e-mail. Você quer?</div>
+        <div class="step-sub">Resumo de treino, sono e recuperação — personalizado pra você, gerado por IA.</div>
+        <div class="options">
+          <button class="opt-btn" onclick="sel(this,'s3')">✅ Sim, quero receber toda semana</button>
+          <button class="opt-btn" onclick="sel(this,'s3')">🤔 Talvez — dependeria do conteúdo</button>
+          <button class="opt-btn" onclick="sel(this,'s3')">❌ Prefiro não receber por e-mail</button>
+        </div>
+      </div>
+      <div class="step" id="s4">
+        <div class="step-q">Qual é o seu e-mail?</div>
+        <div class="step-sub">Você receberá o resumo por e-mail.</div>
+        <input id="email-input" type="email" placeholder="seuemail@gmail.com" style="width:100%;background:var(--mid);border:1px solid var(--border);color:var(--white);font-family:'Barlow',sans-serif;font-size:14px;padding:12px 16px;margin-top:8px;outline:none;" oninput="checkEmail()" onfocus="this.style.borderColor='var(--yellow)'" onblur="this.style.borderColor='var(--border)'">
+      </div>
+      <div class="step" id="s5">
+        <div class="thankyou">
+          <div class="ty-icon">⚡</div>
+          <h3>Você está na lista.</h3>
+          <p>Quando o Resumo Semanal de Saúde estiver disponível, você será um dos primeiros a receber. Obrigada por ajudar a SmartFit a ir além da academia.</p>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer" id="modal-footer">
+      <div class="step-indicator" id="step-ind">1 de 4</div>
+      <button class="next-btn" id="next-btn" disabled onclick="nextStep()">Continuar →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 06 EXPLORAÇÕES ===== -->
+<div id="exploracoes" class="panel" style="display:none">
+  <div class="slabel">Explorações adicionais</div>
+  <h2 class="disp">Ideias que merecem<br><em>investigação antes de aposta.</em></h2>
+  <p class="lead">Dois temas que abrem possibilidades reais para o Wellness 3.0 — mas que precisam de validação de custo, comportamento e viabilidade técnica antes de virar hipótese formal.</p>
+
+  <!-- WEARABLE MARKET SHARE -->
+  <div class="slabel" style="margin-top:8px">Wearables no Brasil — custo vs renda presumida do aluno SmartFit</div>
+  <p class="lead">Se o público SmartFit é majoritariamente classe C com renda entre R$2.000–4.000/mês, qual wearable cabe no bolso? E o que isso significa para qualquer integração de dados de saúde?</p>
+
+  <div class="wbox">
+    <h4>Market share estimado × acessibilidade para o público SmartFit</h4>
+    <div class="wrow">
+      <div style="flex:1">
+        <div class="wname">Xiaomi Smart Band 9 / Redmi Watch 5</div>
+        <div class="wbar"><div class="wbar-fill" style="width:35%"></div></div>
+        <div class="wnote">R$180–350 · ~1–5 dias de trabalho na renda mediana · <strong style="color:var(--yellow)">Mais acessível para o público SmartFit</strong></div>
+      </div>
+      <div class="wpct">~35%</div>
+    </div>
+    <div class="wrow">
+      <div style="flex:1">
+        <div class="wname">Samsung Galaxy Fit 3</div>
+        <div class="wbar"><div class="wbar-fill" style="width:22%"></div></div>
+        <div class="wnote">R$350–500 · ~5–8 dias de trabalho · acessível para classe C superior</div>
+      </div>
+      <div class="wpct">~22%</div>
+    </div>
+    <div class="wrow">
+      <div style="flex:1">
+        <div class="wname">Amazfit Bip 6 / Huawei Band 10</div>
+        <div class="wbar"><div class="wbar-fill" style="width:22%"></div></div>
+        <div class="wnote">R$400–700 · ~7–12 dias de trabalho · limiar de acessibilidade para classe C</div>
+      </div>
+      <div class="wpct">~22%</div>
+    </div>
+    <div class="wrow">
+      <div style="flex:1">
+        <div class="wname">Samsung Galaxy Watch / Garmin</div>
+        <div class="wbar"><div class="wbar-fill" style="width:13%"></div></div>
+        <div class="wnote">R$800–2.000 · ~13–33 dias de trabalho · fora do alcance da maioria do público SmartFit</div>
+      </div>
+      <div class="wpct">~13%</div>
+    </div>
+    <div class="wrow">
+      <div style="flex:1">
+        <div class="wname">Apple Watch SE / Series</div>
+        <div class="wbar"><div class="wbar-fill" style="width:8%"></div></div>
+        <div class="wnote">R$2.000–5.000 · ~33–83 dias de trabalho · nicho premium, não é o público SmartFit</div>
+      </div>
+      <div class="wpct">~8%</div>
+    </div>
+    <div class="wrow">
+      <div style="flex:1">
+        <div class="wname">Sem wearable — só celular</div>
+        <div class="wbar"><div class="wbar-fill" style="width:75%"></div></div>
+        <div class="wnote"><strong style="color:var(--yellow)">Inferência:</strong> se ~15–25% têm wearable (estimativa global IHRSA 2024, não dado SmartFit), então ~75–85% não têm. Dado invertido — sem fonte direta. O celular é o único dispositivo universal confirmado.</div>
+      </div>
+      <div class="wpct">maioria</div>
+    </div>
+    <div class="fn">IDC Brasil 2026 · TechTudo mai/2026 · OficinaDaNet mai/2026 · Cálculo de dias de trabalho baseado em salário mínimo 2026 (R$1.518) e renda presumida classe C (R$2.000–4.000). Valores de market share são indicativos.</div>
+  </div>
+
+  <div class="callout" style="margin-bottom:32px">
+    <span class="ctag">Implicação para o produto</span>
+    <p>A penetração de wearables no público SmartFit é provavelmente baixa — estimativa baseada em benchmarks globais de academia (IHRSA 2024), não em dado direto. O que é certo: a câmera do celular é universal. Qualquer solução de tracking precisa funcionar sem wearable como base.</p>
+  </div>
+
+  <!-- NFC / QR -->
+  <div class="slabel">NFC e QR Code — tracking por equipamento</div>
+  <h2 class="disp" style="font-size:clamp(20px,3vw,36px)">E se o app soubesse<br><em>exatamente o que você fez?</em></h2>
+  <p class="lead">A ideia: cada equipamento teria uma tag que o aluno escaneia com o celular → o app registra qual máquina usou, quando, e monta o histórico de treino automaticamente. Sem entrada manual.</p>
+
+  <div class="nfc-layout">
+    <div class="nfc-explain">
+
+      <h3>NFC — o que é e a limitação real</h3>
+      <p>NFC (Near Field Communication) permite leitura de tag passiva a até 4cm. Tags custam R$1–5 e duram anos. O problema: <strong style="color:var(--white)">nem todo celular tem NFC</strong>. iPhones abaixo do 7 não têm. Androids de entrada (que predominam na classe C) frequentemente não têm. Estima-se que apenas 40–60% dos smartphones em uso no Brasil suportem NFC nativo para leitura de tags.</p>
+
+      <h3>QR Code — alternativa universal e mais barata para testar</h3>
+      <p>QR Code funciona com qualquer celular que tenha câmera — ou seja, 100% da base. Custo por adesivo: R$0,10–0,50. Leitura via câmera nativa (sem precisar abrir o app em muitos dispositivos). <strong style="color:var(--white)">Uma boa forma de testar a hipótese antes de investir em NFC</strong>: colar QR Codes em 20–30 máquinas de uma unidade piloto e medir quantos alunos escaneiam espontaneamente em 2 semanas.</p>
+
+      <div class="nfc-flow">
+        <div class="nfc-step active-step">
+          <div class="nfc-icon">📷</div>
+          <div class="nfc-step-text"><h4>1. Aluno vê o QR na máquina</h4><p>Adesivo plastificado colado na lateral do equipamento — visível e durável</p></div>
+        </div>
+        <div class="nfc-step">
+          <div class="nfc-icon">📱</div>
+          <div class="nfc-step-text"><h4>2. Escaneia com a câmera</h4><p>Abre o app SmartFit ou uma página web — sem precisar de app específico</p></div>
+        </div>
+        <div class="nfc-step">
+          <div class="nfc-icon">✅</div>
+          <div class="nfc-step-text"><h4>3. App registra: máquina + horário</h4><p>"Maria usou a puxada frontal às 7h32" — dado real sem entrada manual</p></div>
+        </div>
+        <div class="nfc-step">
+          <div class="nfc-icon">📊</div>
+          <div class="nfc-step-text"><h4>4. Histórico de treino completo</h4><p>Base para o Resumo Semanal de Evolução com contexto real do treino</p></div>
+        </div>
+      </div>
+
+      <div class="vs-box" style="margin-top:16px">
+        <h4>QR Code vs NFC — comparação</h4>
+        <div class="vs-row"><div class="vs-icon">✅</div><p><strong>QR Code:</strong> Funciona em 100% dos celulares com câmera, custo irrisório (R$0,10–0,50/adesivo), sem dependência de hardware do usuário, fácil de testar em piloto de 1 unidade</p></div>
+        <div class="vs-row"><div class="vs-icon">⚠️</div><p><strong>NFC:</strong> Mais fluido (sem abrir câmera), porém exige que o celular tenha NFC — excluindo parcela relevante do público. Melhor como evolução após QR validado.</p></div>
+        <div class="vs-row"><div class="vs-icon">💡</div><p><strong>NFC + QR juntos (abordagem híbrida):</strong> Colocar os dois na mesma máquina — quem tem NFC usa NFC, quem não tem usa QR. Custo adicional mínimo (~R$3–6/máquina total) e cobre 100% da base sem excluir ninguém. Ideal para o piloto.</p></div>
+        <div class="vs-row"><div class="vs-icon">🔬</div><p><strong>Como testar:</strong> Piloto híbrido (QR + NFC) em 1 unidade (20–30 máquinas, ~R$100–200 de custo total). Medir: taxa de escaneamento, frequência, impacto na retenção vs grupo controle em 30 dias.</p></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="nfc-machine">
+        <div class="machine-icon">🏋️</div>
+        <h3>Puxada Frontal</h3>
+        <p style="font-size:11px;color:var(--gray);margin-bottom:12px">Escaneie para registrar este exercício</p>
+        <div style="background:var(--white);padding:12px;border-radius:6px;display:inline-block;margin-bottom:10px">
+          <svg width="80" height="80" viewBox="0 0 80 80">
+            <rect width="80" height="80" fill="white"/>
+            <rect x="5" y="5" width="25" height="25" fill="black" rx="2"/>
+            <rect x="8" y="8" width="19" height="19" fill="white"/>
+            <rect x="11" y="11" width="13" height="13" fill="black"/>
+            <rect x="50" y="5" width="25" height="25" fill="black" rx="2"/>
+            <rect x="53" y="8" width="19" height="19" fill="white"/>
+            <rect x="56" y="11" width="13" height="13" fill="black"/>
+            <rect x="5" y="50" width="25" height="25" fill="black" rx="2"/>
+            <rect x="8" y="53" width="19" height="19" fill="white"/>
+            <rect x="11" y="56" width="13" height="13" fill="black"/>
+            <rect x="35" y="5" width="5" height="5" fill="black"/>
+            <rect x="43" y="5" width="5" height="5" fill="black"/>
+            <rect x="35" y="13" width="5" height="5" fill="black"/>
+            <rect x="43" y="13" width="5" height="5" fill="black"/>
+            <rect x="5" y="35" width="5" height="5" fill="black"/>
+            <rect x="13" y="35" width="5" height="5" fill="black"/>
+            <rect x="5" y="43" width="5" height="5" fill="black"/>
+            <rect x="13" y="43" width="5" height="5" fill="black"/>
+            <rect x="35" y="35" width="40" height="5" fill="black"/>
+            <rect x="35" y="43" width="5" height="32" fill="black"/>
+            <rect x="50" y="43" width="5" height="5" fill="black"/>
+            <rect x="60" y="43" width="15" height="5" fill="black"/>
+            <rect x="60" y="53" width="5" height="22" fill="black"/>
+            <rect x="50" y="55" width="8" height="5" fill="black"/>
+            <rect x="43" y="60" width="5" height="15" fill="black"/>
+            <rect x="50" y="65" width="8" height="5" fill="black"/>
+          </svg>
+        </div>
+        <div style="font-size:9px;color:var(--gray);letter-spacing:1px;text-transform:uppercase">QR Code ilustrativo</div>
+        <p style="font-size:10px;color:var(--gray);margin-top:10px">Adesivo plastificado · R$0,10–0,50/un<br>Piloto: 1 unidade · 20–30 máquinas · ~R$15</p>
+      </div>
+
+      <div class="callout" style="margin-top:16px">
+        <span class="ctag">Custo de piloto — 3 opções</span>
+        <p><strong>Só QR (1 unidade):</strong> R$15–30 total. Cobre 100% dos celulares.<br><strong>Só NFC (1 unidade):</strong> R$150–400 em tags. Exclui ~40–60% dos celulares.<br><strong>Híbrido QR + NFC (recomendado):</strong> R$100–200 total. Cobre 100% da base — quem tem NFC usa NFC, quem não tem usa QR. Melhor dado de comportamento por segmento.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<script>
+let cstep=1,answers={},count=0;
+
+function tab(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  // mostrar painel exploracoes que começa com display:none
+  if(id==='exploracoes') document.getElementById('exploracoes').style.display='block';
+}
+
+function openModal(){
+  cstep=1;answers={};
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.opt-btn').forEach(b=>b.classList.remove('selected'));
+  if(document.getElementById('email-input')) document.getElementById('email-input').value='';
+  document.getElementById('s1').classList.add('active');
+  document.getElementById('next-btn').disabled=true;
+  document.getElementById('step-ind').textContent='1 de 4';
+  document.getElementById('modal-footer').style.display='flex';
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal(){document.getElementById('modal').classList.remove('open');}
+
+function sel(btn,step){
+  btn.closest('.options').querySelectorAll('.opt-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  answers[step]=btn.textContent.trim();
+  document.getElementById('next-btn').disabled=false;
+}
+
+function checkEmail(){
+  const v=document.getElementById('email-input').value;
+  document.getElementById('next-btn').disabled=!v.includes('@');
+}
+
+function nextStep(){
+  const total=4;
+  if(cstep<total){
+    document.getElementById('s'+cstep).classList.remove('active');
+    cstep++;
+    document.getElementById('s'+cstep).classList.add('active');
+    if(cstep===4){
+      document.getElementById('next-btn').disabled=true;
+    } else {
+      document.getElementById('next-btn').disabled=true;
+    }
+    document.getElementById('step-ind').textContent=cstep+' de '+total;
+  }else{
+    const email=document.getElementById('email-input')?document.getElementById('email-input').value:'—';
+    document.getElementById('s4').classList.remove('active');
+    document.getElementById('s5').classList.add('active');
+    document.getElementById('modal-footer').style.display='none';
+    count++;
+    document.getElementById('counter').textContent=count;
+    const c=s=>s.replace(/^[^\w]+\s/,'').split(' ')[0];
+    document.getElementById('r-wearable').textContent=c(answers['s1']||'—');
+    document.getElementById('r-objetivo').textContent=c(answers['s2']||'—');
+    document.getElementById('r-interesse').textContent=(answers['s3']||'').includes('toda')? 'Alto':(answers['s3']||'').includes('Talvez')?'Médio':'Baixo';
+    document.getElementById('r-email').textContent=email||'—';
+    document.getElementById('results-area').style.display='block';
+    setTimeout(closeModal,4000);
+  }
+}
+
+document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+</script>
+</body>
+</html>
