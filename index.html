@@ -291,9 +291,8 @@ h2.disp em{color:var(--yellow);font-style:normal;}
   <button onclick="tab('hipotese',this)">02 · Hipótese</button>
   <button onclick="tab('priorizacao',this)">03 · Priorização</button>
   <button onclick="tab('fakedoor',this)">04 · Fake Door</button>
-  <button onclick="tab('prototipo',this)">05 · Protótipo</button>
-  <button onclick="tab('receita',this)">06 · Receita</button>
-  <button onclick="tab('exploracoes',this)">07 · Explorações</button>
+  <button onclick="tab('receita',this)">05 · Receita</button>
+  <button onclick="tab('exploracoes',this)">06 · Explorações</button>
 </nav>
 
 <main>
@@ -728,69 +727,6 @@ h2.disp em{color:var(--yellow);font-style:normal;}
 
 </div>
 
-<!-- ===== 05 PROTÓTIPO ===== -->
-<div id="prototipo" class="panel">
-  <div class="slabel">05 · Protótipo interativo</div>
-  <h2 class="disp">O app que o aluno<br><em>experimentaria.</em></h2>
-  <p class="lead">Protótipo navegável da experiência proposta — do check-in ao resumo semanal. Toque no banner para interagir com o fluxo completo.</p>
-
-  <div style="display:flex;gap:64px;align-items:flex-start;flex-wrap:wrap;margin-top:32px;justify-content:center">
-    <div style="display:flex;justify-content:center;flex:0 0 auto">
-      <div class="phone">
-        <div class="phone-notch"></div>
-        <div class="phone-screen">
-          <div class="app-header">
-            <div class="app-logo">SmartFit</div>
-            <div class="app-sub">Wellness 3.0</div>
-          </div>
-          <div class="app-body">
-            <div class="app-hero">
-              <div class="greeting">Bom dia</div>
-              <div class="name">Maria ✦</div>
-              <div class="vital-strip">
-                <div class="vital-chip"><div class="val">72</div><div class="lbl">BPM</div></div>
-                <div class="vital-chip"><div class="val">7h2</div><div class="lbl">Sono</div></div>
-                <div class="vital-chip"><div class="val">84%</div><div class="lbl">Rec.</div></div>
-              </div>
-            </div>
-            <div class="app-section">
-              <div class="fd-banner" onclick="openModal()" style="cursor:pointer">
-                <div class="banner-tag">⚡ Novidade SmartFit</div>
-                <div class="banner-title">Receba seu Resumo Semanal de Saúde</div>
-                <div class="banner-sub">Todo domingo no seu e-mail: sua evolução de treino, sono e recuperação — personalizado pra você.</div>
-                <div class="banner-cta">Quero receber →</div>
-              </div>
-              <div class="app-section-title">Sua semana</div>
-              <div class="activity-card"><div class="activity-icon">🏋️</div><div><div class="a-title">Musculação · Seg</div><div class="a-sub">48 min · 380 kcal</div></div></div>
-              <div class="activity-card"><div class="activity-icon">🚴</div><div><div class="a-title">Bike · Qua</div><div class="a-sub">35 min · 290 kcal</div></div></div>
-              <div class="activity-card"><div class="activity-icon">🧘</div><div><div class="a-title">Yoga · Sex</div><div class="a-sub">60 min · 180 kcal</div></div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div style="flex:1;min-width:280px;padding-top:8px">
-      <p style="color:var(--gray);font-size:13px;margin-bottom:20px">Toque no banner para vivenciar o fluxo completo →</p>
-
-      <div class="results-area" id="results-area-proto">
-        <h4>Simulação — dados que iriam para a planilha</h4>
-        <div class="result-row"><span>Dispositivo</span><span id="rp-wearable">—</span></div>
-        <div class="result-row"><span>Objetivo</span><span id="rp-objetivo">—</span></div>
-        <div class="result-row"><span>Interesse</span><span id="rp-interesse">—</span></div>
-        <div class="result-row"><span>E-mail</span><span id="rp-email">—</span></div>
-        <div class="result-row"><span>Status</span><span style="color:var(--green)">✓ Iria para planilha + e-mail automático</span></div>
-      </div>
-
-      <div class="live-counter" style="margin-top:16px">
-        <div class="dot"></div>
-        <div class="counter-text"><strong id="counter-proto">0</strong> pessoas completaram o fluxo nessa sessão</div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
 <!-- ===== 06 RECEITA ===== -->
 <div id="receita" class="panel">
   <div class="slabel">Estratégia de upsell e monetização</div>
@@ -959,7 +895,10 @@ h2.disp em{color:var(--yellow);font-style:normal;}
       </div>
     </div>
 
-    <div class="phone-wrap">
+    <div class="phone-wrap" style="flex-direction:column;align-items:center;gap:16px">
+      <div style="display:inline-flex;align-items:center;gap:8px;background:var(--yellow);color:var(--black);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:12px;letter-spacing:1px;text-transform:uppercase;padding:8px 16px;">
+        👇 Clique no banner para iniciar o fluxo
+      </div>
       <div class="phone">
         <div class="phone-notch"></div>
         <div class="phone-screen">
@@ -995,8 +934,6 @@ h2.disp em{color:var(--yellow);font-style:normal;}
     </div>
   </div>
 </div>
-
-<!-- MODAL — 4 steps incluindo email -->
 <div class="modal-overlay" id="modal">
   <div class="modal">
     <div class="modal-bar">
