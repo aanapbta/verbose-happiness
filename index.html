@@ -281,9 +281,8 @@ h2.disp em{color:var(--yellow);font-style:normal;}
 <header>
   <div class="logo">
     <h1>SmartFit <span style="opacity:.5">|</span> Wellness 3.0</h1>
-    <p>Hipótese estratégica — pesquisado com IA · maio 2026</p>
   </div>
-  <div class="meta">Ana Paula Batista · Head of Design + Product<br>anapbta@gmail.com · linkedin.com/in/anabatista</div>
+  <div class="meta">Ana Paula Batista<br>anapbta@gmail.com · <a href="https://linkedin.com/in/anabatista" target="_blank" style="color:#555;text-decoration:none;">linkedin.com/in/anabatista</a></div>
 </header>
 
 <nav>
@@ -292,8 +291,9 @@ h2.disp em{color:var(--yellow);font-style:normal;}
   <button onclick="tab('hipotese',this)">02 · Hipótese</button>
   <button onclick="tab('priorizacao',this)">03 · Priorização</button>
   <button onclick="tab('fakedoor',this)">04 · Fake Door</button>
-  <button onclick="tab('receita',this)">05 · Receita</button>
-  <button onclick="tab('exploracoes',this)">06 · Explorações</button>
+  <button onclick="tab('prototipo',this)">05 · Protótipo</button>
+  <button onclick="tab('receita',this)">06 · Receita</button>
+  <button onclick="tab('exploracoes',this)">07 · Explorações</button>
 </nav>
 
 <main>
@@ -728,7 +728,70 @@ h2.disp em{color:var(--yellow);font-style:normal;}
 
 </div>
 
-<!-- ===== 05 RECEITA ===== -->
+<!-- ===== 05 PROTÓTIPO ===== -->
+<div id="prototipo" class="panel">
+  <div class="slabel">05 · Protótipo interativo</div>
+  <h2 class="disp">O app que o aluno<br><em>experimentaria.</em></h2>
+  <p class="lead">Protótipo navegável da experiência proposta — do check-in ao resumo semanal. Toque no banner para interagir com o fluxo completo.</p>
+
+  <div style="display:flex;gap:64px;align-items:flex-start;flex-wrap:wrap;margin-top:32px;justify-content:center">
+    <div style="display:flex;justify-content:center;flex:0 0 auto">
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="app-header">
+            <div class="app-logo">SmartFit</div>
+            <div class="app-sub">Wellness 3.0</div>
+          </div>
+          <div class="app-body">
+            <div class="app-hero">
+              <div class="greeting">Bom dia</div>
+              <div class="name">Maria ✦</div>
+              <div class="vital-strip">
+                <div class="vital-chip"><div class="val">72</div><div class="lbl">BPM</div></div>
+                <div class="vital-chip"><div class="val">7h2</div><div class="lbl">Sono</div></div>
+                <div class="vital-chip"><div class="val">84%</div><div class="lbl">Rec.</div></div>
+              </div>
+            </div>
+            <div class="app-section">
+              <div class="fd-banner" onclick="openModal()" style="cursor:pointer">
+                <div class="banner-tag">⚡ Novidade SmartFit</div>
+                <div class="banner-title">Receba seu Resumo Semanal de Saúde</div>
+                <div class="banner-sub">Todo domingo no seu e-mail: sua evolução de treino, sono e recuperação — personalizado pra você.</div>
+                <div class="banner-cta">Quero receber →</div>
+              </div>
+              <div class="app-section-title">Sua semana</div>
+              <div class="activity-card"><div class="activity-icon">🏋️</div><div><div class="a-title">Musculação · Seg</div><div class="a-sub">48 min · 380 kcal</div></div></div>
+              <div class="activity-card"><div class="activity-icon">🚴</div><div><div class="a-title">Bike · Qua</div><div class="a-sub">35 min · 290 kcal</div></div></div>
+              <div class="activity-card"><div class="activity-icon">🧘</div><div><div class="a-title">Yoga · Sex</div><div class="a-sub">60 min · 180 kcal</div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex:1;min-width:280px;padding-top:8px">
+      <p style="color:var(--gray);font-size:13px;margin-bottom:20px">Toque no banner para vivenciar o fluxo completo →</p>
+
+      <div class="results-area" id="results-area-proto">
+        <h4>Simulação — dados que iriam para a planilha</h4>
+        <div class="result-row"><span>Dispositivo</span><span id="rp-wearable">—</span></div>
+        <div class="result-row"><span>Objetivo</span><span id="rp-objetivo">—</span></div>
+        <div class="result-row"><span>Interesse</span><span id="rp-interesse">—</span></div>
+        <div class="result-row"><span>E-mail</span><span id="rp-email">—</span></div>
+        <div class="result-row"><span>Status</span><span style="color:var(--green)">✓ Iria para planilha + e-mail automático</span></div>
+      </div>
+
+      <div class="live-counter" style="margin-top:16px">
+        <div class="dot"></div>
+        <div class="counter-text"><strong id="counter-proto">0</strong> pessoas completaram o fluxo nessa sessão</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== 06 RECEITA ===== -->
 <div id="receita" class="panel">
   <div class="slabel">Estratégia de upsell e monetização</div>
   <h2 class="disp">SmartFit já sabe fazer upsell.<br><em>Esse seria o próximo.</em></h2>
@@ -991,7 +1054,7 @@ h2.disp em{color:var(--yellow);font-style:normal;}
 </div>
 
 <!-- ===== 06 EXPLORAÇÕES ===== -->
-<div id="exploracoes" class="panel" style="display:none">
+<div id="exploracoes" class="panel">
   <div class="slabel">Explorações adicionais</div>
   <h2 class="disp">Ideias que merecem<br><em>investigação antes de aposta.</em></h2>
   <p class="lead">Dois temas que abrem possibilidades reais para o Wellness 3.0 — mas que precisam de validação de custo, comportamento e viabilidade técnica antes de virar hipótese formal.</p>
@@ -1153,12 +1216,13 @@ h2.disp em{color:var(--yellow);font-style:normal;}
 let cstep=1,answers={},count=0;
 
 function tab(id,btn){
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>{
+    p.classList.remove('active');
+    p.style.display='';
+  });
   document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
-  // mostrar painel exploracoes que começa com display:none
-  if(id==='exploracoes') document.getElementById('exploracoes').style.display='block';
 }
 
 function openModal(){
@@ -1207,11 +1271,25 @@ function nextStep(){
     count++;
     document.getElementById('counter').textContent=count;
     const c=s=>s.replace(/^[^\w]+\s/,'').split(' ')[0];
-    document.getElementById('r-wearable').textContent=c(answers['s1']||'—');
-    document.getElementById('r-objetivo').textContent=c(answers['s2']||'—');
-    document.getElementById('r-interesse').textContent=(answers['s3']||'').includes('toda')? 'Alto':(answers['s3']||'').includes('Talvez')?'Médio':'Baixo';
+    const wval=c(answers['s1']||'—');
+    const oval=c(answers['s2']||'—');
+    const ival=(answers['s3']||'').includes('toda')?'Alto':(answers['s3']||'').includes('Talvez')?'Médio':'Baixo';
+
+    document.getElementById('r-wearable').textContent=wval;
+    document.getElementById('r-objetivo').textContent=oval;
+    document.getElementById('r-interesse').textContent=ival;
     document.getElementById('r-email').textContent=email||'—';
     document.getElementById('results-area').style.display='block';
+
+    const rp=document.getElementById('results-area-proto');
+    if(rp){
+      document.getElementById('rp-wearable').textContent=wval;
+      document.getElementById('rp-objetivo').textContent=oval;
+      document.getElementById('rp-interesse').textContent=ival;
+      document.getElementById('rp-email').textContent=email||'—';
+      rp.style.display='block';
+      document.getElementById('counter-proto').textContent=count;
+    }
     setTimeout(closeModal,4000);
   }
 }
